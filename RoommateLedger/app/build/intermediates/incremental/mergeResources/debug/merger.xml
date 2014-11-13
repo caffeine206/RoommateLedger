@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="2" >
+
+    <dataSet config="main" >
+        <source path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res" >
+            <file
+                name="icon"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\drawable\icon.png"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="ledger_edit"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\ledger_edit.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="ledger_edit_header"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\ledger_edit_header.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="ledger_list"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\ledger_list.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="ledger_row"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\ledger_row.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="purchase_edit"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\purchase_edit.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="purchase_edit_footer"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\purchase_edit_footer.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="purchase_edit_header"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\purchase_edit_header.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="purchase_list"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\purchase_list.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="purchase_row"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\purchase_row.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\values\strings.xml"
+                qualifiers="" >
+                <string name="menu_delete" >Delete Purchase
+                </string>
+                <string name="amount" >Amount
+                </string>
+                <string name="description" >Description
+                </string>
+                <string name="confirm" >Confirm
+                </string>
+                <string name="total_amount" >$0.0
+                </string>
+                <string name="menu_insert" >Add Purchase
+                </string>
+                <string name="homeheader2" >Members
+                </string>
+                <string name="homeheader1" >Ledger
+                </string>
+                <string name="total" >Total
+                </string>
+                <string name="roommate2" >Roommate #2
+                </string>
+                <string name="roommate3" >Roommate #3
+                </string>
+                <string name="roommate4" >Roommate #4
+                </string>
+                <string name="roommate5" >Roommate #5
+                </string>
+                <string name="roommate1" >Your Name
+                </string>
+                <string name="no_purchases" >No Purchases Yet
+                </string>
+                <string name="roommate6" >Roommate #6
+                </string>
+                <string name="home_delete" >Delete Ledger
+                </string>
+                <string name="header2" >Amount
+                </string>
+                <string name="header1" >Purchase
+                </string>
+                <string name="no_ledgers" >No Ledgers Yet
+                </string>
+                <string name="app_name" >Roommate Ledger
+                </string>
+                <string name="title" >Title
+                </string>
+                <string name="edit_purchase" >Edit Purchase
+                </string>
+                <string name="home_insert" >Add Ledger
+                </string>
+                <string name="home_edit" >Edit Ledger
+                </string>
+                <string name="edit_ledger" >Edit Ledger
+                </string>
+            </file>
+        </source>
+        <source path="E:\Documents\2014\Autumn\498\RoommateLedger\app\build\generated\res\rs\debug" />
+        <source path="E:\Documents\2014\Autumn\498\RoommateLedger\app\build\generated\res\generated\debug" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\debug\res" />
+    </dataSet>
+
+</merger>

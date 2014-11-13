@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="2" >
+
+    <dataSet config="main" >
+        <source path="E:\Documents\2014\Autumn\498\Notepadv1\app\src\main\res" >
+            <file
+                name="icon"
+                path="E:\Documents\2014\Autumn\498\Notepadv1\app\src\main\res\drawable\icon.png"
+                qualifiers=""
+                type="drawable" />
+            <file
+                name="notepad_list"
+                path="E:\Documents\2014\Autumn\498\Notepadv1\app\src\main\res\layout\notepad_list.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="notes_row"
+                path="E:\Documents\2014\Autumn\498\Notepadv1\app\src\main\res\layout\notes_row.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                path="E:\Documents\2014\Autumn\498\Notepadv1\app\src\main\res\values\strings.xml"
+                qualifiers="" >
+                <string name="menu_insert" >Add Item
+                </string>
+                <string name="app_name" >Notepad v1
+                </string>
+                <string name="no_notes" >No Notes Yet
+                </string>
+            </file>
+        </source>
+        <source path="E:\Documents\2014\Autumn\498\Notepadv1\app\build\generated\res\rs\debug" />
+        <source path="E:\Documents\2014\Autumn\498\Notepadv1\app\build\generated\res\generated\debug" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="E:\Documents\2014\Autumn\498\Notepadv1\app\src\debug\res" />
+    </dataSet>
+
+</merger>

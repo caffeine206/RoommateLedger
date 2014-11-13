@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- From: file:/E:/Documents/2014/Autumn/498/Notepadv1/app/src/main/res/values/strings.xml -->
+    <eat-comment />
+
+    <string name="app_name">Notepad v1</string>
+    <string name="menu_insert">Add Item</string>
+    <string name="no_notes">No Notes Yet</string>
+
+</resources>
