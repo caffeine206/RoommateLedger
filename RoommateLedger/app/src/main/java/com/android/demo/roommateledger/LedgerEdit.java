@@ -106,18 +106,6 @@ public class LedgerEdit extends Activity {
                 roommates.get(index).setText(members.getString(members.getColumnIndexOrThrow(HomeDbAdapter.KEY_MEMBER)));
                 index++;
             }
-//            mRoommateText1.setText(ledger.getString(
-//                    ledger.getColumnIndexOrThrow(HomeDbAdapter.KEY_MEMBER)));
-//            mRoommateText2.setText(ledger.getString(
-//                    ledger.getColumnIndexOrThrow(HomeDbAdapter.KEY_MEMBER)));
-//            mRoommateText3.setText(ledger.getString(
-//                    ledger.getColumnIndexOrThrow(HomeDbAdapter.KEY_MEMBER)));
-//            mRoommateText4.setText(ledger.getString(
-//                    ledger.getColumnIndexOrThrow(HomeDbAdapter.KEY_MEMBER)));
-//            mRoommateText5.setText(ledger.getString(
-//                    ledger.getColumnIndexOrThrow(HomeDbAdapter.KEY_MEMBER)));
-//            mRoommateText6.setText(ledger.getString(
-//                    ledger.getColumnIndexOrThrow(HomeDbAdapter.KEY_MEMBER)));
         }
     }
 

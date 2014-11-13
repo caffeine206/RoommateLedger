@@ -31,6 +31,8 @@ public class PurchaseEdit extends Activity {
     private Long mRowId;
     private LedgerDbAdapter mDbHelper;
 
+    private Long ledger_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +54,17 @@ public class PurchaseEdit extends Activity {
 			Bundle extras = getIntent().getExtras();
 			mRowId = extras != null ? extras.getLong(LedgerDbAdapter.KEY_ROWID)
 									: null;
+
 		}
+        ledger_id = (savedInstanceState == null) ? null :
+                (Long) savedInstanceState.getSerializable(HomeDbAdapter.KEY_ROWID);
+        if (ledger_id == null) {
+            Bundle extras = getIntent().getExtras();
+            ledger_id = extras != null ? extras.getLong(HomeDbAdapter.KEY_ROWID)
+                    : null;
+        }
+        System.out.println("mRowId = " + mRowId);
+        System.out.println("ledger_id = " + ledger_id);
 
 		populateFields();
 
@@ -67,15 +79,17 @@ public class PurchaseEdit extends Activity {
     }
 
     private void populateFields() {
-        if (mRowId != null) {
+        if (mRowId != null && ledger_id != null) {
             Cursor purchase = mDbHelper.fetchPurchase(mRowId);
             startManagingCursor(purchase);
-            mTitleText.setText(purchase.getString(
-                    purchase.getColumnIndexOrThrow(LedgerDbAdapter.KEY_TITLE)));
-            mDescriptionText.setText(purchase.getString(
-                    purchase.getColumnIndexOrThrow(LedgerDbAdapter.KEY_DESCRIPTION)));
-            mAmountText.setText(purchase.getString(
-                    purchase.getColumnIndexOrThrow(LedgerDbAdapter.KEY_AMOUNT)));
+            if (purchase != null && purchase.moveToFirst()) {
+                mTitleText.setText(purchase.getString(
+                        purchase.getColumnIndexOrThrow(LedgerDbAdapter.KEY_TITLE)));
+                mDescriptionText.setText(purchase.getString(
+                        purchase.getColumnIndexOrThrow(LedgerDbAdapter.KEY_DESCRIPTION)));
+                mAmountText.setText(purchase.getString(
+                        purchase.getColumnIndexOrThrow(LedgerDbAdapter.KEY_AMOUNT)));
+            }
         }
     }
 
@@ -104,12 +118,12 @@ public class PurchaseEdit extends Activity {
         double amount = Double.parseDouble(mAmountText.getText().toString());
 
         if (mRowId == null) {
-            long id = mDbHelper.createPurchase(title, description, amount);
+            long id = mDbHelper.createPurchase(title, description, amount, ledger_id);
             if (id > 0) {
                 mRowId = id;
             }
         } else {
-            mDbHelper.updatePurchase(mRowId, title, description, amount);
+            mDbHelper.updatePurchase(mRowId, title, description, amount, ledger_id);
         }
     }
 

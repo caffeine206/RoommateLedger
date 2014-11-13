@@ -9,7 +9,7 @@
         android:id="@+id/text1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="First"
+        android:text="@string/header1"
         android:layout_weight="2">
     </TextView>
 
@@ -17,7 +17,7 @@
         android:id="@+id/text2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Second"
+        android:text="@string/header2"
         android:layout_weight="2">
     </TextView>
 </LinearLayout>

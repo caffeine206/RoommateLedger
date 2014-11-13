@@ -56,9 +56,9 @@
             <file
                 path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\values\strings.xml"
                 qualifiers="" >
-                <string name="menu_delete" >Delete Purchase
-                </string>
                 <string name="amount" >Amount
+                </string>
+                <string name="menu_delete" >Delete Purchase
                 </string>
                 <string name="description" >Description
                 </string>
@@ -100,11 +100,11 @@
                 </string>
                 <string name="title" >Title
                 </string>
+                <string name="home_edit" >Edit Ledger
+                </string>
                 <string name="edit_purchase" >Edit Purchase
                 </string>
                 <string name="home_insert" >Add Ledger
-                </string>
-                <string name="home_edit" >Edit Ledger
                 </string>
                 <string name="edit_ledger" >Edit Ledger
                 </string>

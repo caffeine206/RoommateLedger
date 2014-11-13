@@ -49,46 +49,10 @@ public class HomeDbAdapter {
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
 
-    /**
-     * Database creation sql statement
-     */
-    private static final String DATABASE_CREATE =
-            "create table ledgers (_id integer primary key autoincrement, "
-                    + "title text not null, description text not null);";
-
-    private static final String MEMBER_DATABASE_CREATE =
-            "create table members (_id integer primary key autoincrement, "
-                    + "ledger_id integer not null, member text not null, "
-                    + "FOREIGN KEY (ledger_id) REFERENCES ledgers(_id));";
-
-    private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE = "ledgers";
     private static final String MEMBERS_DATABASE_TABLE = "members";
-    private static final int DATABASE_VERSION = 2;
 
     private final Context mCtx;
-
-    private static class DatabaseHelper extends SQLiteOpenHelper {
-
-        DatabaseHelper(Context context) {
-            super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            db.execSQL(DATABASE_CREATE);
-            db.execSQL(MEMBER_DATABASE_CREATE);
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-                    + newVersion + ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS ledgers");
-            db.execSQL("DROP TABLE IF EXISTS members");
-            onCreate(db);
-        }
-    }
 
     /**
      * Constructor - takes the context to allow the database to be
@@ -110,7 +74,7 @@ public class HomeDbAdapter {
      * @throws android.database.SQLException if the database could be neither opened or created
      */
     public HomeDbAdapter open() throws SQLException {
-        mDbHelper = new DatabaseHelper(mCtx);
+        mDbHelper = DatabaseHelper.getInstance(mCtx);
         mDb = mDbHelper.getWritableDatabase();
         return this;
     }
@@ -180,10 +144,12 @@ public class HomeDbAdapter {
      * @return Cursor over all ledgers
      */
     public Cursor fetchAllMembers(long ledger_id) {
-//        return mDb.query(MEMBERS_DATABASE_TABLE, new String[]{KEY_ROWID_MEMBER, KEY_LEDGER_ID,
-//                KEY_MEMBER}, null, null, null, null, null);
-        return mDb.rawQuery("SELECT member FROM " + MEMBERS_DATABASE_TABLE + " WHERE ledger_id = ?",
+        Cursor mCursor = mDb.rawQuery("SELECT member FROM " + MEMBERS_DATABASE_TABLE + " WHERE ledger_id = ?",
                 new String[] {String.valueOf(ledger_id)});
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor;
     }
 
     /**
