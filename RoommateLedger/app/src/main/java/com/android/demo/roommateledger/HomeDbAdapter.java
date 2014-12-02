@@ -43,7 +43,9 @@ public class HomeDbAdapter {
     public static final String KEY_MEMBER = "member";
     public static final String KEY_LEDGER_ID = "ledger_id";
     public static final String KEY_ROWID = "_id";
-    public static final String KEY_ROWID_MEMBER = "_id";
+    public static final String KEY_MEMBER_ID = "member_id";
+    public static final String KEY_BALANCE = "balance";
+    public static final String KEY_SPEND = "spend";
 
     private static final String TAG = "HomeDbAdapter";
     private DatabaseHelper mDbHelper;
@@ -51,6 +53,7 @@ public class HomeDbAdapter {
 
     private static final String DATABASE_TABLE = "ledgers";
     private static final String MEMBERS_DATABASE_TABLE = "members";
+    private static final String BALANCES_DATABASE_TABLE = "balances";
 
     private final Context mCtx;
 
@@ -93,7 +96,6 @@ public class HomeDbAdapter {
      * @return rowId or -1 if failed
      */
     public long createLedger(String title, String description, List<String> members) {
-        System.out.println("create ledger called");
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_TITLE, title);
         initialValues.put(KEY_DESCRIPTION, description);
@@ -121,7 +123,7 @@ public class HomeDbAdapter {
      * @return true if deleted, false otherwise
      */
     public boolean deleteMember(long rowId) {
-        return mDb.delete(MEMBERS_DATABASE_TABLE, KEY_ROWID_MEMBER + "=" + rowId, null) > 0;
+        return mDb.delete(MEMBERS_DATABASE_TABLE, KEY_MEMBER_ID + "=" + rowId, null) > 0;
     }
 
     public boolean deleteMembers(long ledger_id) {
@@ -179,8 +181,8 @@ public class HomeDbAdapter {
      */
     public Cursor fetchMember(long rowId) throws SQLException {
         Cursor mCursor =
-                mDb.query(true, MEMBERS_DATABASE_TABLE, new String[]{KEY_ROWID_MEMBER,
-                                KEY_LEDGER_ID, KEY_MEMBER}, KEY_ROWID_MEMBER + "=" + rowId, null,
+                mDb.query(true, MEMBERS_DATABASE_TABLE, new String[]{KEY_MEMBER_ID,
+                                KEY_LEDGER_ID, KEY_MEMBER}, KEY_MEMBER_ID + "=" + rowId, null,
                         null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
@@ -200,7 +202,6 @@ public class HomeDbAdapter {
      */
     public boolean updateLedger(long rowId, String title, String description,
                                 List<String> members) {
-        System.out.println("update ledger called");
         ContentValues args = new ContentValues();
         args.put(KEY_TITLE, title);
         args.put(KEY_DESCRIPTION, description);
@@ -215,7 +216,6 @@ public class HomeDbAdapter {
     }
 
     public boolean updateMembers(long ledger_id, List<String> members) {
-        System.out.println("update members called");
         ContentValues initialValues;
         try {
             mDb.beginTransaction();
@@ -224,8 +224,13 @@ public class HomeDbAdapter {
                 initialValues = new ContentValues();
                 initialValues.put(KEY_MEMBER, member);
                 initialValues.put(KEY_LEDGER_ID, ledger_id);
-
-                mDb.insert(MEMBERS_DATABASE_TABLE, null, initialValues);
+                Long member_id = mDb.insert(MEMBERS_DATABASE_TABLE, null, initialValues);
+                initialValues = new ContentValues();
+                initialValues.put(KEY_LEDGER_ID, ledger_id);
+                initialValues.put(KEY_BALANCE, 0);
+                initialValues.put(KEY_SPEND, 0);
+                initialValues.put(KEY_MEMBER_ID, member_id);
+                mDb.insert(BALANCES_DATABASE_TABLE, null, initialValues);
             }
             mDb.setTransactionSuccessful();
         } catch (SQLException e) {

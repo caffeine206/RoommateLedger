@@ -25,12 +25,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + "FOREIGN KEY (ledger_id) REFERENCES ledgers(_id));";
 
     private static final String PURCHASES_TABLE_CREATE =
-            "create table purchases (_id integer primary key autoincrement, ledger_id integer not null, "
-                    + "title text not null, description text not null, amount decimal (19,4) not null, " +
-                    "FOREIGN KEY (ledger_id) REFERENCES ledgers(_id));";
+            "create table purchases (_id integer primary key autoincrement, " +
+                    "ledger_id integer not null, member_id integer not null, title text not null, " +
+                    "description text not null, amount decimal (19,4) not null, " +
+                    "FOREIGN KEY (ledger_id) REFERENCES ledgers(_id), " +
+                    "FOREIGN KEY (member_id) REFERENCES ledgers(_id));";
+
+    private static final String PAYMENTS_TABLE_CREATE =
+            "create table payments (_id integer primary key autoincrement, " +
+                    "ledger_id integer not null, title text not null, " +
+                    "description text not null, from_member_id integer not null, " +
+                    "to_member_id integer not null, amount decimal (19,4) not null, " +
+                    "FOREIGN KEY (ledger_id) REFERENCES ledgers(_id), " +
+                    "FOREIGN KEY (from_member_id) REFERENCES members(_id));";
 
     public static DatabaseHelper getInstance(Context context) {
-
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
         // See this article for more information: http://bit.ly/6LRzfx
@@ -53,6 +62,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(LEDGERS_TABLE_CREATE);
         db.execSQL(MEMBERS_TABLE_CREATE);
         db.execSQL(PURCHASES_TABLE_CREATE);
+        db.execSQL(PAYMENTS_TABLE_CREATE);
     }
 
     @Override
@@ -61,6 +71,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS ledgers");
         db.execSQL("DROP TABLE IF EXISTS members");
+        db.execSQL("DROP TABLE IF EXISTS payments");
+        db.execSQL("DROP TABLE IF EXISTS purchases");
         onCreate(db);
     }
 }

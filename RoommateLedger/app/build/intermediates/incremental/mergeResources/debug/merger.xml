@@ -29,6 +29,26 @@
                 qualifiers=""
                 type="layout" />
             <file
+                name="payment_edit"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\payment_edit.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="payment_edit_header"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\payment_edit_header.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="payment_list"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\payment_list.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="payment_row"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\payment_row.xml"
+                qualifiers=""
+                type="layout" />
+            <file
                 name="purchase_edit"
                 path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\purchase_edit.xml"
                 qualifiers=""
@@ -56,21 +76,37 @@
             <file
                 path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\values\strings.xml"
                 qualifiers="" >
-                <string name="amount" >Amount
+                <string name="menu_payment_insert" >Add Payment
+                </string>
+                <string name="toroommate" >To roommate
                 </string>
                 <string name="menu_delete" >Delete Purchase
                 </string>
-                <string name="description" >Description
+                <string name="amount" >Amount
+                </string>
+                <string name="description" >Purchase Description
+                </string>
+                <string name="payment_header" >Payment Amount
+                </string>
+                <string name="balance_header" >Balance
                 </string>
                 <string name="confirm" >Confirm
                 </string>
-                <string name="total_amount" >$0.0
+                <string name="total_amount" >$0.00
                 </string>
                 <string name="menu_insert" >Add Purchase
                 </string>
+                <string name="edit_payment" >Edit Payment
+                </string>
                 <string name="homeheader2" >Members
                 </string>
+                <string name="view_balances" >View Balances
+                </string>
+                <string name="balance_edit_header" >Needs to pay
+                </string>
                 <string name="homeheader1" >Ledger
+                </string>
+                <string name="menu_delete_payment" >Delete Payment
                 </string>
                 <string name="total" >Total
                 </string>
@@ -80,15 +116,29 @@
                 </string>
                 <string name="roommate4" >Roommate #4
                 </string>
+                <string name="manage_payments" >Manage Payments
+                </string>
                 <string name="roommate5" >Roommate #5
+                </string>
+                <string name="fromroommate" >Payment from roommate
+                </string>
+                <string name="no_payments" >No Payments Yet
                 </string>
                 <string name="roommate1" >Your Name
                 </string>
                 <string name="no_purchases" >No Purchases Yet
                 </string>
+                <string name="roommate_header" >Roommate
+                </string>
+                <string name="payment_description" >Payment Description
+                </string>
                 <string name="roommate6" >Roommate #6
                 </string>
+                <string name="no_balances" >No Balances Yet
+                </string>
                 <string name="home_delete" >Delete Ledger
+                </string>
+                <string name="ledger_description" >Description
                 </string>
                 <string name="header2" >Amount
                 </string>
@@ -96,19 +146,38 @@
                 </string>
                 <string name="no_ledgers" >No Ledgers Yet
                 </string>
+                <string name="title" >Title
+                </string>
                 <string name="app_name" >Roommate Ledger
                 </string>
-                <string name="title" >Title
+                <string name="header3" >Payment
                 </string>
                 <string name="home_edit" >Edit Ledger
                 </string>
+                <string name="home_insert" >Add Ledger
+                </string>
                 <string name="edit_purchase" >Edit Purchase
                 </string>
-                <string name="home_insert" >Add Ledger
+                <string name="roommate" >Roommate who made purchase
                 </string>
                 <string name="edit_ledger" >Edit Ledger
                 </string>
             </file>
+            <file
+                name="balance_list"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\balance_list.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="balance_edit_header"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\balance_edit_header.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="balance_row"
+                path="E:\Documents\2014\Autumn\498\RoommateLedger\app\src\main\res\layout\balance_row.xml"
+                qualifiers=""
+                type="layout" />
         </source>
         <source path="E:\Documents\2014\Autumn\498\RoommateLedger\app\build\generated\res\rs\debug" />
         <source path="E:\Documents\2014\Autumn\498\RoommateLedger\app\build\generated\res\generated\debug" />

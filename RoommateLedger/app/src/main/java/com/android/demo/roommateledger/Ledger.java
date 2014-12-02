@@ -32,24 +32,28 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class Ledger extends ListActivity {
     private static final int ACTIVITY_CREATE=0;
     private static final int ACTIVITY_EDIT=1;
 
     private static final int INSERT_ID = Menu.FIRST;
-    private static final int DELETE_ID = Menu.FIRST + 1;
+    private static final int PAYMENT_ID = Menu.FIRST + 1;
+    private static final int BALANCE_ID = Menu.FIRST + 2;
+    private static final int DELETE_ID = Menu.FIRST;
 
     private LedgerDbAdapter mDbHelper;
-    private Long mRowId;
+    private Long mLedgerId;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        mRowId = (savedInstanceState == null) ? null :
+        mLedgerId = (savedInstanceState == null) ? null :
                 (Long) savedInstanceState.getSerializable(HomeDbAdapter.KEY_ROWID);
-        if (mRowId == null) {
+        if (mLedgerId == null) {
             Bundle extras = getIntent().getExtras();
-            mRowId = extras != null ? extras.getLong(HomeDbAdapter.KEY_ROWID)
+            mLedgerId = extras != null ? extras.getLong(HomeDbAdapter.KEY_ROWID)
                     : null;
         }
         super.onCreate(savedInstanceState);
@@ -62,29 +66,23 @@ public class Ledger extends ListActivity {
     }
 
     private void fillData() {
-        Cursor purchasesCursor = mDbHelper.fetchAllPurchases(mRowId);
-        System.out.println("filldata called");
-        if( purchasesCursor != null && purchasesCursor.moveToFirst() ) {
-            startManagingCursor(purchasesCursor);
-            System.out.print("Cursor not null, dumping contents: ");
-            DatabaseUtils.dumpCurrentRow(purchasesCursor);
-//        System.out.println("col 0" + purchasesCursor.getLong(0) + ", col1" + purchasesCursor.getLong(1));
+        Cursor purchasesCursor = mDbHelper.fetchAllPurchases(mLedgerId);
+        startManagingCursor(purchasesCursor);
 
-            // Create an array to specify the fields we want to display in the list (only TITLE)
-            String[] from = new String[]{LedgerDbAdapter.KEY_TITLE, LedgerDbAdapter.KEY_AMOUNT};
+        // Create an array to specify the fields we want to display in the list (only TITLE)
+        String[] from = new String[]{LedgerDbAdapter.KEY_TITLE, LedgerDbAdapter.KEY_AMOUNT};
 
-            // and an array of the fields we want to bind those fields to (in this case just text1)
-            int[] to = new int[]{R.id.text1, R.id.text2};
+        // and an array of the fields we want to bind those fields to (in this case just text1)
+        int[] to = new int[]{R.id.text1, R.id.text2};
 
-            // Now create a simple cursor adapter and set it to display
-            SimpleCursorAdapter purchases =
-                    new SimpleCursorAdapter(this, R.layout.purchase_row, purchasesCursor, from, to);
-            setListAdapter(purchases);
-        }
+        // Now create a simple cursor adapter and set it to display
+        SimpleCursorAdapter purchases =
+                new SimpleCursorAdapter(this, R.layout.purchase_row, purchasesCursor, from, to);
+        setListAdapter(purchases);
     }
 
     private void updateTotal() {
-        double total = mDbHelper.fetchTotalOfPurchases(mRowId);
+        double total = mDbHelper.fetchTotalOfPurchases(mLedgerId);
         TextView t = (TextView)findViewById(R.id.textViewFooter2);
         t.setText("$" + String.valueOf(total));
     }
@@ -93,6 +91,8 @@ public class Ledger extends ListActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         menu.add(0, INSERT_ID, 0, R.string.menu_insert);
+        menu.add(0, PAYMENT_ID, 0, R.string.manage_payments);
+        menu.add(0, BALANCE_ID, 0, R.string.view_balances);
         return true;
     }
 
@@ -102,6 +102,14 @@ public class Ledger extends ListActivity {
             case INSERT_ID:
                 createPurchase();
                 return true;
+            case PAYMENT_ID:
+                Intent i = new Intent(this, Payments.class);
+                i.putExtra(HomeDbAdapter.KEY_ROWID, mLedgerId);
+                startActivity(i);
+            case BALANCE_ID:
+                Intent j = new Intent(this, Balances.class);
+                j.putExtra(HomeDbAdapter.KEY_ROWID, mLedgerId);
+                startActivity(j);
         }
 
         return super.onMenuItemSelected(featureId, item);
@@ -128,7 +136,8 @@ public class Ledger extends ListActivity {
 
     private void createPurchase() {
         Intent i = new Intent(this, PurchaseEdit.class);
-        i.putExtra(HomeDbAdapter.KEY_ROWID, mRowId);
+        i.putExtra(LedgerDbAdapter.KEY_LEDGER_ID, mLedgerId);
+        i.putExtra(LedgerDbAdapter.KEY_ROWID, -1L);
         startActivityForResult(i, ACTIVITY_CREATE);
     }
 
@@ -136,8 +145,8 @@ public class Ledger extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         Intent i = new Intent(this, PurchaseEdit.class);
+        i.putExtra(LedgerDbAdapter.KEY_LEDGER_ID, mLedgerId);
         i.putExtra(LedgerDbAdapter.KEY_ROWID, id);
-        i.putExtra(HomeDbAdapter.KEY_ROWID, mRowId);
         startActivityForResult(i, ACTIVITY_EDIT);
     }
 

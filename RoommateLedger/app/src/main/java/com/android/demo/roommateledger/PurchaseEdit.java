@@ -20,8 +20,13 @@ import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+
+import java.util.List;
 
 public class PurchaseEdit extends Activity {
 
@@ -29,9 +34,9 @@ public class PurchaseEdit extends Activity {
     private EditText mDescriptionText;
     private EditText mAmountText;
     private Long mRowId;
+    private Long mLedgerId;
     private LedgerDbAdapter mDbHelper;
-
-    private Long ledger_id;
+    private Spinner mSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,26 +50,24 @@ public class PurchaseEdit extends Activity {
         mTitleText = (EditText) findViewById(R.id.title);
         mDescriptionText = (EditText) findViewById(R.id.description);
         mAmountText = (EditText) findViewById(R.id.amount);
+        mSpinner = (Spinner) findViewById(R.id.spinner);
 
         Button confirmButton = (Button) findViewById(R.id.confirm);
 
         mRowId = (savedInstanceState == null) ? null :
             (Long) savedInstanceState.getSerializable(LedgerDbAdapter.KEY_ROWID);
-		if (mRowId == null) {
-			Bundle extras = getIntent().getExtras();
-			mRowId = extras != null ? extras.getLong(LedgerDbAdapter.KEY_ROWID)
-									: null;
-
-		}
-        ledger_id = (savedInstanceState == null) ? null :
-                (Long) savedInstanceState.getSerializable(HomeDbAdapter.KEY_ROWID);
-        if (ledger_id == null) {
-            Bundle extras = getIntent().getExtras();
-            ledger_id = extras != null ? extras.getLong(HomeDbAdapter.KEY_ROWID)
-                    : null;
+        mLedgerId = (savedInstanceState == null) ? null :
+                (Long) savedInstanceState.getSerializable(LedgerDbAdapter.KEY_LEDGER_ID);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            Long id = extras.getLong(LedgerDbAdapter.KEY_ROWID);
+            if (mRowId == null && id != -1) {
+                mRowId = id;
+            }
+            if (mLedgerId == null) {
+                mLedgerId = extras.getLong(LedgerDbAdapter.KEY_LEDGER_ID);
+            }
         }
-        System.out.println("mRowId = " + mRowId);
-        System.out.println("ledger_id = " + ledger_id);
 
 		populateFields();
 
@@ -79,7 +82,15 @@ public class PurchaseEdit extends Activity {
     }
 
     private void populateFields() {
-        if (mRowId != null && ledger_id != null) {
+        if (mLedgerId != null) {
+            List<String> members = mDbHelper.fetchAllRoommates(mLedgerId);
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, members);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // attaching data adapter to spinner
+            mSpinner.setAdapter(dataAdapter);
+        }
+        if (mRowId != null) {
             Cursor purchase = mDbHelper.fetchPurchase(mRowId);
             startManagingCursor(purchase);
             if (purchase != null && purchase.moveToFirst()) {
@@ -89,15 +100,20 @@ public class PurchaseEdit extends Activity {
                         purchase.getColumnIndexOrThrow(LedgerDbAdapter.KEY_DESCRIPTION)));
                 mAmountText.setText(purchase.getString(
                         purchase.getColumnIndexOrThrow(LedgerDbAdapter.KEY_AMOUNT)));
+                String text = (purchase.getString(
+                        purchase.getColumnIndexOrThrow(LedgerDbAdapter.KEY_MEMBER)));
+                int offset = mDbHelper.getCountBefore(mLedgerId);
+                mSpinner.setSelection(Integer.valueOf(text) - 1 - offset);
             }
         }
     }
 
-    @Override
+        @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         saveState();
         outState.putSerializable(LedgerDbAdapter.KEY_ROWID, mRowId);
+        outState.putSerializable(LedgerDbAdapter.KEY_LEDGER_ID, mLedgerId);
     }
 
     @Override
@@ -115,16 +131,16 @@ public class PurchaseEdit extends Activity {
     private void saveState() {
         String title = mTitleText.getText().toString();
         String description = mDescriptionText.getText().toString();
+        String roommate = mSpinner.getSelectedItem().toString();
         double amount = Double.parseDouble(mAmountText.getText().toString());
 
         if (mRowId == null) {
-            long id = mDbHelper.createPurchase(title, description, amount, ledger_id);
+            long id = mDbHelper.createPurchase(title, roommate, description, amount, mLedgerId);
             if (id > 0) {
                 mRowId = id;
             }
         } else {
-            mDbHelper.updatePurchase(mRowId, title, description, amount, ledger_id);
+            mDbHelper.updatePurchase(title, roommate, description, amount, mRowId, mLedgerId);
         }
     }
-
 }

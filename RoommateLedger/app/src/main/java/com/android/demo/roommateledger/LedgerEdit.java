@@ -98,11 +98,8 @@ public class LedgerEdit extends Activity {
             mDescriptionText.setText(ledger.getString(
                     ledger.getColumnIndexOrThrow(HomeDbAdapter.KEY_DESCRIPTION)));
             int index = 0;
-            System.out.println("attempting to populate fields");
-            System.out.println("cursor count: " + members.getCount());
             members.moveToPosition(-1);
             while (members.moveToNext()) {
-                System.out.println("member: " + members.getString(members.getColumnIndexOrThrow(HomeDbAdapter.KEY_MEMBER)));
                 roommates.get(index).setText(members.getString(members.getColumnIndexOrThrow(HomeDbAdapter.KEY_MEMBER)));
                 index++;
             }
@@ -135,7 +132,6 @@ public class LedgerEdit extends Activity {
         for (EditText roommate : roommates) {
             String member = roommate.getText().toString();
             if (!member.equals("")) {
-                System.out.println("saving state... " + member);
                 members.add(roommate.getText().toString());
             }
         }

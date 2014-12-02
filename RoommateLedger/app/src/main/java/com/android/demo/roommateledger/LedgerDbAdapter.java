@@ -24,6 +24,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Simple purchases database access helper class. Defines the basic CRUD operations
  * for the purchase example, and gives the ability to list all purchases as well as
@@ -40,13 +43,17 @@ public class LedgerDbAdapter {
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_AMOUNT = "amount";
     public static final String KEY_LEDGER_ID = "ledger_id";
+    public static final String KEY_MEMBER = "member_id";
+    public static final String KEY_MEMBER_ID = "_id";
     public static final String KEY_ROWID = "_id";
 
     private static final String TAG = "LedgerDbAdapter";
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
 
-    private static final String DATABASE_TABLE = "purchases";
+    private static final String PURCHASES_DATABASE_TABLE = "purchases";
+    private static final String PAYMENTS_DATABASE_TABLE = "payments";
+    private static final String MEMBERS_DATABASE_TABLE = "members";
 
     private final Context mCtx;
     /**
@@ -89,14 +96,27 @@ public class LedgerDbAdapter {
      * @param amount      the amount of the purchase
      * @return rowId or -1 if failed
      */
-    public long createPurchase(String title, String description, double amount, long ledger_id) {
+    public long createPurchase(String title, String member, String description, double amount, long ledger_id) {
+        long member_id = getMemberId(member, ledger_id);
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_TITLE, title);
+        initialValues.put(KEY_MEMBER, member_id);
         initialValues.put(KEY_DESCRIPTION, description);
         initialValues.put(KEY_AMOUNT, amount);
         initialValues.put(KEY_LEDGER_ID, ledger_id);
 
-        return mDb.insert(DATABASE_TABLE, null, initialValues);
+        return mDb.insert(PURCHASES_DATABASE_TABLE, null, initialValues);
+    }
+
+    public long getMemberId(String member, long ledger_id) {
+        Cursor mCursor =
+                mDb.query(MEMBERS_DATABASE_TABLE, new String[]{KEY_MEMBER_ID},
+                        "ledger_id = ? AND member = ?",
+                        new String[]{String.valueOf(ledger_id), member}, null, null, null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        return mCursor.getLong(0);
     }
 
     /**
@@ -106,21 +126,34 @@ public class LedgerDbAdapter {
      * @return true if deleted, false otherwise
      */
     public boolean deletePurchase(long rowId) {
-        return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
+        return mDb.delete(PURCHASES_DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
     }
 
     /**
      * Return a Cursor over the list of all purchases in the database
-     *
+     * @param ledger_id ID of ledger in which to get purchases
      * @return Cursor over all purchases
      */
     public Cursor fetchAllPurchases(long ledger_id) {
-        Cursor mCursor = mDb.rawQuery("SELECT _id, title, amount FROM " + DATABASE_TABLE + " WHERE ledger_id = ?",
+        Cursor mCursor = mDb.rawQuery("SELECT _id, title, amount FROM purchases WHERE ledger_id = ?",
                 new String[] {String.valueOf(ledger_id)});
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-        }
         return mCursor;
+    }
+
+    /**
+     * Return a Cursor over the list of roommates for the given ledger_id in the database
+     *
+     * @return Cursor over all roommates
+     */
+    public List<String> fetchAllRoommates(long ledger_id) {
+        Cursor mCursor = mDb.rawQuery("SELECT member FROM members WHERE ledger_id = ?",
+                new String[] {String.valueOf(ledger_id)});
+        List<String> members = new ArrayList<String>();
+        mCursor.moveToPosition(-1);
+        while (mCursor.moveToNext()) {
+            members.add(mCursor.getString((mCursor.getColumnIndexOrThrow(HomeDbAdapter.KEY_MEMBER))));
+        }
+        return members;
     }
 
     /**
@@ -132,14 +165,24 @@ public class LedgerDbAdapter {
      */
     public Cursor fetchPurchase(long rowId) throws SQLException {
         Cursor mCursor =
-                mDb.query(true, DATABASE_TABLE, new String[]{KEY_ROWID,
+                mDb.query(true, PURCHASES_DATABASE_TABLE, new String[]{KEY_ROWID, KEY_MEMBER,
                                 KEY_TITLE, KEY_DESCRIPTION, KEY_AMOUNT}, KEY_ROWID + "=" + rowId, null,
                         null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
         return mCursor;
+    }
 
+    public int getCountBefore(long ledger_id) {
+        if (ledger_id > 1) {
+            String sql = "SELECT COUNT(*) FROM members WHERE ledger_id < ?";
+            Cursor cursor = mDb.rawQuery(sql, new String[]{String.valueOf(ledger_id)});
+            if (cursor.moveToFirst()) {
+                return cursor.getInt(0);
+            }
+        }
+        return 0;
     }
 
     /**
@@ -149,21 +192,23 @@ public class LedgerDbAdapter {
      *
      * @param rowId id of purchase to update
      * @param title value to set purchase title to
-     * @param body  value to set purchase body to
+     * @param description  value to set purchase body to
      * @return true if the purchase was successfully updated, false otherwise
      */
-    public boolean updatePurchase(long rowId, String title, String body, double amount, long ledger_id) {
+    public boolean updatePurchase(String title, String member, String description, double amount, long rowId, long ledger_id) {
+        long member_id = getMemberId(member, ledger_id);
         ContentValues args = new ContentValues();
         args.put(KEY_TITLE, title);
-        args.put(KEY_DESCRIPTION, body);
+        args.put(KEY_MEMBER, member_id);
+        args.put(KEY_DESCRIPTION, description);
         args.put(KEY_AMOUNT, amount);
         args.put(KEY_LEDGER_ID, ledger_id);
 
-        return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
+        return mDb.update(PURCHASES_DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
     }
 
     public double fetchTotalOfPurchases(long ledger_id) {
-        String sql = "SELECT SUM(" + KEY_AMOUNT + ") FROM " + DATABASE_TABLE +
+        String sql = "SELECT SUM(" + KEY_AMOUNT + ") FROM " + PURCHASES_DATABASE_TABLE +
                 " WHERE ledger_id=" + ledger_id;
         Cursor cursor = mDb.rawQuery(sql, null);
         if(cursor.moveToFirst()) {

@@ -12,10 +12,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.android.demo.roommateledger.Ledger" >
-        </activity>
+        <activity android:name="com.android.demo.roommateledger.Ledger" />
         <activity android:name="com.android.demo.roommateledger.PurchaseEdit" />
         <activity android:name="com.android.demo.roommateledger.LedgerEdit" />
+        <activity android:name="com.android.demo.roommateledger.Payments" />
+        <activity android:name="com.android.demo.roommateledger.PaymentEdit" />
+        <activity android:name="com.android.demo.roommateledger.Balances" />
     </application>
 
 </manifest>

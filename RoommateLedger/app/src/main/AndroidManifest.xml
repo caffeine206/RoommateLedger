@@ -7,9 +7,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Ledger">
-        </activity>
+        <activity android:name=".Ledger" />
         <activity android:name=".PurchaseEdit" />
         <activity android:name=".LedgerEdit" />
+        <activity android:name=".Payments" />
+        <activity android:name=".PaymentEdit" />
+        <activity android:name=".Balances" />
     </application>
 </manifest> 

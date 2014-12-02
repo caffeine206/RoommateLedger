@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Roommate Ledger</string>
+    <string name="roommate">Roommate who made purchase</string>
+    <string name="roommate_header">Roommate</string>
+    <string name="fromroommate">Payment from roommate</string>
+    <string name="toroommate">To roommate</string>
     <string name="homeheader1">Ledger</string>
     <string name="homeheader2">Members</string>
     <string name="header1">Purchase</string>
+    <string name="manage_payments">Manage Payments</string>
+    <string name="view_balances">View Balances</string>
     <string name="header2">Amount</string>
+    <string name="header3">Payment</string>
+    <string name="balance_header">Balance</string>
+    <string name="payment_header">Payment Amount</string>
+    <string name="balance_edit_header">Needs to pay</string>
     <string name="total">Total</string>
-    <string name="total_amount">$0.0</string>
+    <string name="total_amount">$0.00</string>
     <string name="no_purchases">No Purchases Yet</string>
+    <string name="no_payments">No Payments Yet</string>
+    <string name="no_balances">No Balances Yet</string>
     <string name="no_ledgers">No Ledgers Yet</string>
     <string name="menu_insert">Add Purchase</string>
+    <string name="menu_payment_insert">Add Payment</string>
     <string name="menu_delete">Delete Purchase</string>
+    <string name="menu_delete_payment">Delete Payment</string>
     <string name="home_insert">Add Ledger</string>
     <string name="home_delete">Delete Ledger</string>
     <string name="home_edit">Edit Ledger</string>
@@ -21,9 +35,12 @@
     <string name="roommate4">Roommate #4</string>
     <string name="roommate5">Roommate #5</string>
     <string name="roommate6">Roommate #6</string>
-    <string name="description">Description</string>
+    <string name="ledger_description">Description</string>
+    <string name="description">Purchase Description</string>
+    <string name="payment_description">Payment Description</string>
     <string name="amount">Amount</string>
     <string name="confirm">Confirm</string>
     <string name="edit_purchase">Edit Purchase</string>
+    <string name="edit_payment">Edit Payment</string>
     <string name="edit_ledger">Edit Ledger</string>
 </resources>

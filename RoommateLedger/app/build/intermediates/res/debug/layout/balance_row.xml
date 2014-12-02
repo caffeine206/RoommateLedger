@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/relativeLayout1"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/roommate_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/header1"
+        android:layout_weight="2">
+    </TextView>
+
+    <TextView
+        android:id="@+id/balance_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/header2"
+        android:layout_weight="2">
+    </TextView>
+</LinearLayout><!-- From: file:/E:/Documents/2014/Autumn/498/RoommateLedger/app/src/main/res/layout/balance_row.xml -->
