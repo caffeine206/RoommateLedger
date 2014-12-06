@@ -32,7 +32,6 @@ import android.widget.TextView;
 
 public class Home extends ListActivity {
     private static final int ACTIVITY_CREATE=0;
-    private static final int ACTIVITY_EDIT=1;
 
     private static final int INSERT_ID = Menu.FIRST;
     private static final int DELETE_ID = Menu.FIRST + 1;
@@ -51,6 +50,7 @@ public class Home extends ListActivity {
         registerForContextMenu(getListView());
     }
 
+    // Get data from the database and put it into the layout
     private void fillData() {
         Cursor ledgersCursor = mDbHelper.fetchAllLedgers();
         startManagingCursor(ledgersCursor);
@@ -112,17 +112,18 @@ public class Home extends ListActivity {
         return super.onContextItemSelected(item);
     }
 
-    private void createLedger() {
-        Intent i = new Intent(this, LedgerEdit.class);
-        startActivityForResult(i, ACTIVITY_CREATE);
-    }
-
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         Intent i = new Intent(this, Ledger.class);
         i.putExtra(HomeDbAdapter.KEY_ROWID, id);
         startActivity(i);
+    }
+
+    // Upon clicking "add ledger" on the menu, start the LedgerEdit activity
+    private void createLedger() {
+        Intent i = new Intent(this, LedgerEdit.class);
+        startActivityForResult(i, ACTIVITY_CREATE);
     }
 
     @Override

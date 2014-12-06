@@ -68,9 +68,7 @@ public class HomeDbAdapter {
     }
 
     /**
-     * Open the ledgers database. If it cannot be opened, try to create a new
-     * instance of the database. If it cannot be created, throw an exception to
-     * signal the failure
+     * Open the database using DatabaseHelper static instance
      *
      * @return this (self reference, allowing this to be chained in an
      * initialization call)
@@ -87,12 +85,13 @@ public class HomeDbAdapter {
     }
 
     /**
-     * Create a new ledger using the title, description, and amount provided. If the ledger is
+     * Create a new ledger using the title, description, and members provided. If the ledger is
      * successfully created return the new rowId for that ledger, otherwise return
      * a -1 to indicate failure.
      *
      * @param title       the title of the ledger
      * @param description the description of the ledger
+     * @param members     the members of the ledger
      * @return rowId or -1 if failed
      */
     public long createLedger(String title, String description, List<String> members) {
@@ -116,16 +115,6 @@ public class HomeDbAdapter {
         return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
     }
 
-    /**
-     * Delete the member with the given rowId
-     *
-     * @param rowId id of ledger to delete
-     * @return true if deleted, false otherwise
-     */
-    public boolean deleteMember(long rowId) {
-        return mDb.delete(MEMBERS_DATABASE_TABLE, KEY_MEMBER_ID + "=" + rowId, null) > 0;
-    }
-
     public boolean deleteMembers(long ledger_id) {
         return mDb.delete(MEMBERS_DATABASE_TABLE, KEY_LEDGER_ID + "=" + ledger_id, null) > 0;
     }
@@ -147,7 +136,7 @@ public class HomeDbAdapter {
      */
     public Cursor fetchAllMembers(long ledger_id) {
         Cursor mCursor = mDb.rawQuery("SELECT member FROM " + MEMBERS_DATABASE_TABLE + " WHERE ledger_id = ?",
-                new String[] {String.valueOf(ledger_id)});
+                new String[]{String.valueOf(ledger_id)});
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
@@ -173,31 +162,13 @@ public class HomeDbAdapter {
     }
 
     /**
-     * Return a Cursor positioned at the member that matches the given rowId
-     *
-     * @param rowId id of member to retrieve
-     * @return Cursor positioned to matching ledger, if found
-     * @throws android.database.SQLException if ledger could not be found/retrieved
-     */
-    public Cursor fetchMember(long rowId) throws SQLException {
-        Cursor mCursor =
-                mDb.query(true, MEMBERS_DATABASE_TABLE, new String[]{KEY_MEMBER_ID,
-                                KEY_LEDGER_ID, KEY_MEMBER}, KEY_MEMBER_ID + "=" + rowId, null,
-                        null, null, null, null);
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-        }
-        return mCursor;
-    }
-
-    /**
      * Update the ledger using the details provided. The ledger to be updated is
      * specified using the rowId, and it is altered to use the title and body
      * values passed in
      *
-     * @param rowId id of ledger to update
-     * @param title value to set ledger title to
-     * @param description  value to set ledger body to
+     * @param rowId       id of ledger to update
+     * @param title       value to set ledger title to
+     * @param description value to set ledger body to
      * @return true if the ledger was successfully updated, false otherwise
      */
     public boolean updateLedger(long rowId, String title, String description,

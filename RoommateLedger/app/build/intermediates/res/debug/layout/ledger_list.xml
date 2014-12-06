@@ -16,5 +16,4 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_ledgers" />
-
 </LinearLayout><!-- From: file:/E:/Documents/2014/Autumn/498/RoommateLedger/app/src/main/res/layout/ledger_list.xml -->

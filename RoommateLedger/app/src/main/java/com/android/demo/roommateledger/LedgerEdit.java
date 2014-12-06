@@ -51,13 +51,14 @@ public class LedgerEdit extends Activity {
 
         mTitleText = (EditText) findViewById(R.id.title);
         mDescriptionText = (EditText) findViewById(R.id.description);
-        roommates = new ArrayList<EditText>();
         mRoommateText1 = (EditText) findViewById(R.id.roommate1);
         mRoommateText2 = (EditText) findViewById(R.id.roommate2);
         mRoommateText3 = (EditText) findViewById(R.id.roommate3);
         mRoommateText4 = (EditText) findViewById(R.id.roommate4);
         mRoommateText5 = (EditText) findViewById(R.id.roommate5);
         mRoommateText6 = (EditText) findViewById(R.id.roommate6);
+
+        roommates = new ArrayList<EditText>();
         roommates.add(mRoommateText1);
         roommates.add(mRoommateText2);
         roommates.add(mRoommateText3);
